@@ -1,3 +1,20 @@
+---
+title: Multi Agent Customer Support
+emoji: 🤖
+colorFrom: blue
+colorTo: green
+sdk: gradio
+sdk_version: "4.44.0"
+python_version: "3.10"
+app_file: app.py
+pinned: false
+---
+
+# 🤖 Multi-Agent Customer Support System
+rest of your README content here...
+
+
+
 # Multi-Agent Customer Support System
 
 A LangGraph-powered customer support pipeline with RAG (ChromaDB + FAQ), LLM fallback, and human escalation.
