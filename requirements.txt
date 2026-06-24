@@ -1,8 +1,9 @@
 langchain
-langchain_core
-langchain_groq
-langchain_community
+langchain-groq
+langchain-community
 langgraph
+chromadb
+sentence-transformers
 gradio
-langchain-community tavily-python
-# pip install chromadb sentence-transformers
+tavily-python
+python-dotenv
