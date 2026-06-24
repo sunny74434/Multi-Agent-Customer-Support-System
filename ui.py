@@ -479,5 +479,5 @@ with gr.Blocks(css=custom_css, title="Customer Support Agent") as gui:
     faq_cat_billing.click(fn=lambda: search_faqs("", "Billing"),     outputs=[faq_output])
     faq_cat_general.click(fn=lambda: search_faqs("", "General"),     outputs=[faq_output])
 
-if __name__ == "__main__":
-    gui.launch()
+# if __name__ == "__main__":
+#     # gui.launch()
