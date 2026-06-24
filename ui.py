@@ -417,7 +417,7 @@ with gr.Blocks(css=custom_css, title="Customer Support Agent") as gui:
                     )
 
                 with gr.Column(scale=1):
-                    results_block = gr.Group(visible=False, elem_classes=["results-section"])
+                    results_block = gr.Column(visible=False, elem_classes=["results-section"])
                     with results_block:
                         gr.HTML('<p class="section-label">Analysis Results</p>')
                         with gr.Row():
@@ -479,5 +479,3 @@ with gr.Blocks(css=custom_css, title="Customer Support Agent") as gui:
     faq_cat_billing.click(fn=lambda: search_faqs("", "Billing"),     outputs=[faq_output])
     faq_cat_general.click(fn=lambda: search_faqs("", "General"),     outputs=[faq_output])
 
-# if __name__ == "__main__":
-#     # gui.launch()
