@@ -3,9 +3,8 @@ langchain-groq
 langchain-community
 langgraph==0.2.70
 langchain-core
-chromadb==0.5.23
-sentence-transformers
+faiss-cpu
+sentence-transformers==2.7.0
 streamlit
 python-dotenv
 tavily-python
-pillow>=10.4.0
