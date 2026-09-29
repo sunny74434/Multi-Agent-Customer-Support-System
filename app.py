@@ -10,13 +10,13 @@ st.set_page_config(page_title="Customer Support Agent", page_icon="💬", layout
 try:
     for _key in ("GROQ_API_KEY", "TAVILY_API_KEY"):
         if _key in st.secrets:
-            os.environ.setdefault(_key, st.secrets[_key])
+            os.environ[_key] = str(st.secrets[_key]).strip().strip('"').strip("'")
 except Exception:
-    pass  # no secrets file (e.g. local run using .env)
-
+    pass
 if not os.environ.get("GROQ_API_KEY"):
     st.error("GROQ_API_KEY is missing. Add it in App settings → Secrets, then reboot the app.")
     st.stop()
+    st.sidebar.caption(f"Groq key: {os.environ['GROQ_API_KEY'][:4]}… (len {len(os.environ['GROQ_API_KEY'])})")
 
 from graph import app as support_graph          # noqa: E402
 from faq import search_faqs                     # noqa: E402
