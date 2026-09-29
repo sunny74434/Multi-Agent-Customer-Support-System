@@ -1,10 +1,20 @@
+Requirements · TXT
+# Core LLM & Agent
 langchain
 langchain-groq
 langchain-community
-langgraph
-chromadb
+langgraph==0.2.70
+langchain-core
+ 
+# Vector DB
+chromadb==0.5.23
 sentence-transformers
-gradio==4.44.0
-tavily-python
+ 
+# UI
+streamlit
+ 
+# Utilities
 python-dotenv
-huggingface-hub==0.23.4
+tavily-python
+pillow>=10.4.0
+ 
