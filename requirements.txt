@@ -1,20 +1,11 @@
-Requirements · TXT
-# Core LLM & Agent
 langchain
 langchain-groq
 langchain-community
 langgraph==0.2.70
 langchain-core
- 
-# Vector DB
 chromadb==0.5.23
 sentence-transformers
- 
-# UI
 streamlit
- 
-# Utilities
 python-dotenv
 tavily-python
 pillow>=10.4.0
- 
