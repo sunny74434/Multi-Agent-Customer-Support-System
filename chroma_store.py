@@ -2,7 +2,53 @@ import chromadb
 from chromadb.utils import embedding_functions
 from langchain_core.prompts import ChatPromptTemplate
 
-from faq import FAQ_DATA  # single source of truth for FAQ content
+from faq import FAQ_DATA  # single source of truth for FAQ contentimport faiss
+import numpy as np
+from sentence_transformers import SentenceTransformer
+from faq import FAQ_DATA
+
+# Load embedding model
+_model = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Build FAQ index
+_docs, _metas = [], []
+for cat, items in FAQ_DATA.items():
+    for item in items:
+        _docs.append(f"Q: {item['q']}\nA: {item['a']}")
+        _metas.append({"category": cat, "question": item["q"]})
+
+# Create FAISS index
+_embeddings = _model.encode(_docs).astype("float32")
+_index = faiss.IndexFlatL2(_embeddings.shape[1])
+_index.add(_embeddings)
+
+FAQ_CONFIDENCE_THRESHOLD = 0.8  # L2 distance (lower = better match)
+
+def rag_resolve(query: str, llm) -> dict:
+    q_vec = _model.encode([query]).astype("float32")
+    distances, indices = _index.search(q_vec, k=3)
+
+    best_distance = float(distances[0][0])
+    print(f"[RAG] Best distance={best_distance:.3f}")
+
+    if best_distance <= FAQ_CONFIDENCE_THRESHOLD:
+        top_doc = _docs[indices[0][0]]
+        answer = top_doc.split("\nA: ", 1)[1].strip() if "\nA: " in top_doc else top_doc
+        return {"resolved": True, "answer": answer, "source": "faq", "faq_context": top_doc}
+
+    # LLM fallback
+    from langchain_core.prompts import ChatPromptTemplate
+    faq_context = "\n\n---\n\n".join([_docs[i] for i in indices[0]])
+    prompt = ChatPromptTemplate.from_template(
+        "You are a support agent.\n\nContext:\n{faq_context}\n\n"
+        "Query: {query}\n\nReply with RESOLVED: <answer> or UNRESOLVED: <reason>"
+    )
+    result = (prompt | llm).invoke({"query": query, "faq_context": faq_context}).content.strip()
+
+    if "unresolved:" in result.lower():
+        return {"resolved": False, "answer": result.split(":", 1)[1].strip(), "source": "escalate", "faq_context": faq_context}
+    return {"resolved": True, "answer": result.split(":", 1)[-1].strip(), "source": "llm", "faq_context": faq_context}
+
 
 # ── ChromaDB client & collection ──────────────────────────────────
 _client = chromadb.PersistentClient(path="./chroma_db")
