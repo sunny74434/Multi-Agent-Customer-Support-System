@@ -1,10 +1,11 @@
+streamlit
 langchain
 langchain-groq
 langchain-community
 langgraph==0.2.70
 langchain-core
 faiss-cpu
+chromadb
 sentence-transformers==2.7.0
-streamlit
 python-dotenv
 tavily-python
